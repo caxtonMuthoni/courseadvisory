@@ -15,7 +15,11 @@ class MessageController extends Controller
      */
     public function index()
     {
-        //
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
+        $messages = Message::all();
+        return view('admin.messages.all')->with("messages",$messages);
     }
 
     /**
@@ -65,8 +69,20 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
         $messages = Message::where([['messagetype','=',false],['readstatus','=',false]])->get();
         return view('admin.messages.messages')->with("messages",$messages);
+    }
+
+    public function showoutbox(Message $message)
+    {
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
+        $messages = Message::where([['messagetype','=',true],['readstatus','=',true]])->get();
+        return view('admin.messages.outbox')->with("messages",$messages);
     }
 
     /**
@@ -77,8 +93,18 @@ class MessageController extends Controller
      */
     public function edit($id)
     {
+
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
         $replyMessage = Message::find($id);
         return view('admin.messages.replyMessage')->with('message',$replyMessage);
+    }
+
+    public function userReply($id)
+    {
+        $replyMessage = Message::find($id);
+        return view('dashboard.messages.replyMessage')->with('message',$replyMessage);
     }
 
     /**
@@ -90,12 +116,15 @@ class MessageController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
         //validation
         $this->validate($request,[
             'message'=>'required'
         ]);
 
-        $messageToReply = Message::where('id',$id)->get();
+        $messageToReply = Message::where('id',$id)->get()->first();
         $messageToReply->readstatus = true;
         $updatestatus = $messageToReply->save();
 
@@ -117,14 +146,60 @@ class MessageController extends Controller
         }
     }
 
+
+    
+
+    public function postUserReply(Request $request, $id)
+    {
+        //validation
+        $this->validate($request,[
+            'message'=>'required'
+        ]);
+
+        $messageToReply = Message::where('id',$id)->get()->first();
+        $messageToReply->readstatus = false;
+        $updatestatus = $messageToReply->save();
+
+        if($updatestatus){
+        $message = new Message;
+        $message->userid = $messageToReply->userid;
+        $message->firstname =$messageToReply->firstname;
+        $message->lastname = $messageToReply->lastname;
+        $message->email = $messageToReply->email;
+        $message->phone=$messageToReply->phone;
+        $message->message = $request->message;
+        $message->messagetype = false;
+        $message->readstatus = false;
+
+        $status = $message->save();
+        if($status){
+            return redirect()->route('userSentMessages')->with("success","Message sent successifully. Please wait for our feedback");
+        }
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Message  $message
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Message $message)
+    public function destroy(Message $message, $id)
     {
-        //
+        $deleteMessage = Message::find($id);
+        $status = $deleteMessage->delete();
+        if($status){
+            return redirect()->back()->with("success","Message deleted successifull !!!");
+        }
+    }
+    //User
+    public function userSentMessages(Message $message)
+    {
+        $messages = Message::where([['messagetype','=',false],['userid','=',Auth::user()->id]])->get();
+        return view('dashboard.messages.outbox')->with("messages",$messages);
+    }
+    public function userInbox(Message $message)
+    {
+        $messages = Message::where([['messagetype','=',true],['userid','=',Auth::user()->id]])->get();
+        return view('dashboard.messages.inbox')->with("messages",$messages);
     }
 }

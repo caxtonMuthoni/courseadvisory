@@ -6,8 +6,13 @@
   <title>User Dashboard</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="{{asset('dist/img/AdminLTELogo.png')}}" type="image/x-icon">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css" />
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" rel="stylesheet">
+
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bbootstrap 4 -->
@@ -27,6 +32,13 @@
   <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+  <style>
+    html
+        {
+            font-size: 100%;
+        }
+</style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -40,18 +52,12 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{url('/')}}" class="nav-link">Home</a>
-        @if(Auth::user()->role)
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('register') }}">{{ __('AdminArea') }}</a>
-            </li>
-        @endif
-      </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{route('contact')}}" class="nav-link">Contact</a>
-      </li>
-
     </ul>
 
+    <?php
+          $messages = App\Message::where([['messagetype','=',false],['readstatus','=',false]])->take(10)->get();
+          $allMessages = App\Message::where([['messagetype','=',false],['readstatus','=',false]])->get();
+        ?>
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
@@ -59,92 +65,53 @@
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
           <i class="far fa-comments"></i>
-          <span class="badge badge-danger navbar-badge">3</span>
+          <span class="badge badge-danger navbar-badge">{{$allMessages->count()}}</span>
         </a>
+       
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+        @foreach($messages as $message)
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
               <img src="{{asset('dist/img/user1-128x128.jpg')}}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
-                  Brad Diesel
+                  {{$message->firstname}} {{$message->lastname}}
                   <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
                 </h3>
-                <p class="text-sm">Call me whenever you can...</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                <p class="text-sm">{{$message->message}}</p>
+                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>{{$message->created_at}}</p>
               </div>
             </div>
             <!-- Message End -->
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{{asset('dist/img/user8-128x128.jpg')}}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  John Pierce
-                  <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">I got your message bro</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <!-- Message Start -->
-            <div class="media">
-              <img src="{{asset('dist/img/user3-128x128.jpg')}}" alt="User Avatar" class="img-size-50 img-circle mr-3">
-              <div class="media-body">
-                <h3 class="dropdown-item-title">
-                  Nora Silvester
-                  <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                </h3>
-                <p class="text-sm">The subject goes here</p>
-                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-              </div>
-            </div>
-            <!-- Message End -->
-          </a>
-          <div class="dropdown-divider"></div>
+          @endforeach
           <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-        </div>
-      </li>
+      
       <li class="nav-item">
         <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">
           <i class="fas fa-cogs"></i>
         </a>
       </li>
+
+      <!-- logout -->
+      <li> <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="triggerId" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+            {{Auth::user()->name}}
+            </button>
+        <div class="dropdown-menu" aria-labelledby="triggerId">
+        <form action="{{route('logout')}}" method="post">
+          @csrf
+          <button class="dropdown-item" type="submit">Logout</button>
+          </form>
+        </div>
+      </div></li>
+
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -177,9 +144,9 @@
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
+            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
               <p>
-                Courses
+                Programs
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -187,28 +154,28 @@
             <li class="nav-item">
                 <a href="{{route('courses')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Registered Courses</p>
+                  <p>Registered Programs</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('courseform')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add Course</p>
+                  <p>Add Program</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+                <a href="{{route('managecourses')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Manage Course</p>
+                  <p>Manage Programs</p>
                 </a>
               </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
+             <i class="fas fa-school    "></i>
               <p>
-                Universities
+                Institutions
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -216,26 +183,26 @@
             <li class="nav-item">
                 <a href="{{route('universities')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Registered universities</P>
+                  <p>Registered Institution</P>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('universityform')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add University</p>
+                  <p>Add Institution</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('manageuniversity')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Manage Universities </p>
+                  <p>Manage Institution </p>
                 </a>
               </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tree"></i>
+             <i class="fa fa-user-plus" aria-hidden="true"></i>
               <p>
                 Users
                 <i class="fas fa-angle-left right"></i>
@@ -243,13 +210,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/UI/general.html" class="nav-link">
+                <a href="{{route('allusers')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>View Users</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/UI/icons.html" class="nav-link">
+                <a href="{{route('users')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Manage Users</p>
                 </a>
@@ -259,13 +226,19 @@
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
+             <i class="fa fa-envelope" aria-hidden="true"></i>
               <p>
                 Messages
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
+            <li class="nav-item">
+                <a href="{{route('allmessages')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Messages</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="{{route('replymessages')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -273,7 +246,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/forms/advanced.html" class="nav-link">
+                <a href="{{route('showoutbox')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Outbox</p>
                 </a>
@@ -288,14 +261,6 @@
               </p>
             </a>
           </li>
-          <li class="nav-item">
-          <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-cog"></i>
-              <p>
-              Change profile
-              </p>
-            </a>
-          </li>
           
         </ul>
       </nav>
@@ -306,16 +271,18 @@
 
   <!-- Content Wrapper. Contains page content -->
  <div class="content-wrapper">
+ <div class="row justify-content-center">
  @if(session()->has('success'))
-    <div class="alert alert-success">
+    <div class="alert alert-success col-md-8">
         {{ session()->get('success') }}
     </div>
 @endif
 @if(session()->has('error'))
-    <div class="alert alert-danger">
+    <div class="alert alert-danger col-md-8">
         {{ session()->get('error') }}
     </div>
 @endif
+ </div>
     @yield('content')
  </div>
   <!-- /.content-wrapper -->
@@ -347,16 +314,6 @@
 <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- ChartJS -->
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
-<!-- Sparkline -->
-<script src="{{asset('plugins/sparklines/sparkline.js')}}"></script>
-<!-- JQVMap -->
-<script src="{{asset('plugins/jqvmap/jquery.vmap.min.js')}}"></script>
-<script src="{{asset('plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
-<!-- jQuery Knob Chart -->
-<script src="{{asset('plugins/jquery-knob/jquery.knob.min.js')}}"></script>
-<!-- daterangepicker -->
-<script src="{{asset('plugins/moment/moment.min.js')}}"></script>
-<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <!-- Summernote -->
@@ -369,10 +326,14 @@
 <script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('dist/js/demo.js')}}"></script>
- 
+<script src="{{asset('js/main/select.js')}}"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/core.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/js/star-rating.min.js"></script>
+ 
   <script>
   $(document).ready( function () {
+    $("#input-id").rating();
     $('#mytable').DataTable();
 } );
   </script>

@@ -14,12 +14,6 @@
                     <li class="active">
             <a href="{{ url('/') }}" class="nav-link text-left">Home</a>
           </li>
-          <li class="has-children">
-            <a href="{{ url('/about') }}" class="nav-link text-left">About Us</a>
-          </li>
-          <li>
-            <a href="{{ url('/courses') }}" class="nav-link text-left">Courses</a>
-          </li>
           <li>
               <a href="{{ url('/contact') }}" class="nav-link text-left">Contact</a>
             </li>
@@ -40,7 +34,7 @@
                         @else
                         @if(Auth::user()->role)
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('AdminArea') }}</a>
+                                    <a class="nav-link" href="{{ route('adminHome') }}">{{ __('AdminArea') }}</a>
                                 </li>
                         @endif
                             <li class="nav-item dropdown">

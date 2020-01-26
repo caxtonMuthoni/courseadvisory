@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\University;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ProfileController;
+use Auth;
 
 class CourseController extends Controller
 {
@@ -42,12 +44,14 @@ class CourseController extends Controller
         $this->validate($request,[
             'name'=>"required",
             'cluster'=>"required | integer | max:70",
+            'program'=>"required",
             'subjects'=>"required",
             'universities'=>"required",
         ]);
         $course = new Course;
         $course->name = $request->name;
         $course->cluster = $request->cluster;
+        $course->program = $request->program;
         $course ->subjects =   $request->subjects;
         $course->universities = $request->input('universities');
         $status = $course->save();
@@ -64,8 +68,12 @@ class CourseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Course $course)
-    {
-        //
+    {   
+        if(Auth::user()->role != 1){
+           return redirect()->route('home');
+        }
+        $courses = Course::all();
+        return view('admin.courses.managecourses')->with('courses',$courses);
     }
 
     /**
@@ -74,9 +82,14 @@ class CourseController extends Controller
      * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function edit(Course $course)
+    public function edit(Course $course ,$id)
     {
-        //
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
+        $course = Course::find($id);
+        $universities = University::all();
+        return view('admin.courses.manageCoursesForm')->with(["course"=>$course,"universities"=>$universities]);
     }
 
     /**
@@ -88,6 +101,9 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
          //Validation
          $this->validate($request,[
             'name'=>"required",
@@ -95,15 +111,40 @@ class CourseController extends Controller
             'subjects'=>"required",
             'universities'=>"required",
         ]);
-        $course = Course;
+        $course = Course::find($id);
         $course->name = $request->name;
         $course->cluster = $request->cluster;
-        $course ->subjects =   $request->subjects;
+        $course ->subjects = $request->subjects;
         $course->universities = $request->input('universities');
         $status = $course->save();
         if($status){
-            return redirect()->back()->with("success","Course added successifully !!!");
+            return redirect()->route('managecourses')->with("success","Course updated successifully !!!");
         }
+    }
+
+
+    public function showProgam($program){
+        $programs = Course::where('program',$program)->get();
+
+        return view('dashboard.programmes.programmes')->with('courses',$programs);
+    }
+
+    public function userProgam(){
+        $cluster = ProfileController::getCluster();
+        if($cluster==0){
+            return redirect()->route('profile')->with("error","Please complete your profile first !!!");
+        }
+        $courses = Course::where([['cluster','<=',$cluster],['program','=','degree']])->get();
+        $courses1 = Course::where([['cluster','<=',$cluster],['program','=','diploma']])->get();
+        $courses2 = Course::where([['cluster','<=',$cluster],['program','=','certificate']])->get();
+        $courses3 = Course::where([['cluster','<=',$cluster],['program','=','artisan']])->get();
+
+        return view('dashboard.basket.courses',compact('courses','courses1','courses2','courses3'));
+    }
+    
+    public function getSelectedCourse($id){
+        $program = Course::where('id',$id)->first();
+        return view('dashboard.basket.selected',compact('program'));
     }
 
     /**
@@ -112,8 +153,15 @@ class CourseController extends Controller
      * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy(Course $course, $id)
     {
-        //
+        if(Auth::user()->role != 1){
+            return redirect()->route('home');
+         }
+        $courseToDelete = $course->find($id);
+        $deleteStatus = $courseToDelete->delete();
+        if($deleteStatus){
+            return redirect()->back()->with("success","Course deleted successifully !!!");
+        }
     }
 }

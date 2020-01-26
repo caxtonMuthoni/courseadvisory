@@ -40,7 +40,7 @@
   ]
 
   $container.append(
-    '<h5>Customize AdminLTE</h5><hr class="mb-2"/>'
+    ' <a href="" data-widget="control-sidebar" data-slide="true"><i class="fa fa-window-close text-danger" aria-hidden="true"></i></a> <h5>Settings</h5><hr class="mb-2"/>'
   )
 
   var $no_border_checkbox = $('<input />', {

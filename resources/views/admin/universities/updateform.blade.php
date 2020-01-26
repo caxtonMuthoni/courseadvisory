@@ -4,14 +4,14 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Update University Details') }}</div>
+                <div class="card-header">{{ __('Update Institutions Details') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('update',$university->id) }}">
                         @csrf
 
                         <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('University Name') }}</label>
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Institution Name') }}</label>
 
                             <div class="col-md-6">
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{$university->name}}" required autocomplete="name" autofocus>
@@ -23,7 +23,23 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Institution Type') }}</label>
 
+                            <div class="col-md-6">
+                                <select name="institution" id="institution" class="form-control">
+                                     <option value="{{$university->institution}}" selected>{{$university->institution}}</option>
+                                     <option value="university">University</option>
+                                     <option value="college">College</option>
+                                </select>
+
+                                @error('institution')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="location" class="col-md-4 col-form-label text-md-right">{{ __('location') }}</label>
 
@@ -59,6 +75,20 @@
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{$university->email}}" name="email" required autocomplete="current-email">
 
                                 @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="rate" class="col-md-4 col-form-label text-md-right">{{ __('Institution Rating') }}</label>
+
+                            <div class="col-md-6">
+                            <input id="input-1" name="rate" class="rating rating-loading form-control" value="{{$university->userAverageRating}}"data-min="0" data-max="5" data-step="1"  data-size="xs">
+
+                                @error('rate')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

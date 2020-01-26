@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
-
+        <title>Get your best course today</title>
+        <link rel="shortcut icon" href="{{asset('dist/img/AdminLTELogo.png')}}" type="image/x-icon">
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
@@ -57,7 +57,23 @@
       @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                    <a class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </a>
                     @else
                         <a href="{{ route('login') }}" class="small mr-3"><span class="icon-unlock-alt"></span> Log In</a>
 
@@ -77,7 +93,7 @@
   <div class="container">
     <div class="d-flex align-items-center">
       <div class="site-logo">
-        <a href="index.html" class="d-block">
+        <a href="/" class="d-block">
           <img src="{{asset('images/logo.jpg')}}" alt="Image" class="img-fluid">
         </a>
       </div>
@@ -85,13 +101,16 @@
         <nav class="site-navigation position-relative text-right" role="navigation">
           <ul class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block">
           <li class="activ">
-            <a href="{{ url('/home') }}" class="nav-link text-left">Home</a>
+            <a href="{{ url('/home') }}" class="nav-link text-left">Dashboard</a>
           </li>
-          <li class="has-children">
-            <a href="{{ url('/about') }}" class="nav-link text-left">About Us</a>
+            <li class="activ">
+            <a href="#t" class="nav-link text-left">Testmonials</a>
           </li>
-          <li>
-            <a href="{{ url('/courses') }}" class="nav-link text-left">Courses</a>
+          <li class="activ">
+            <a href="#p" class="nav-link text-left">  Popular Courses</a>
+          </li>
+          <li class="activ">
+            <a href="#n" class="nav-link text-left">News &amp; Updates</a>
           </li>
           <li>
               <a href="{{ url('/contact') }}" class="nav-link text-left">Contact</a>
@@ -195,7 +214,7 @@
 </div>
 
 
-<div class="site-section">
+<div class="site-section" id="p">
   <div class="container">
 
 
@@ -362,7 +381,7 @@
 </div>
 
 <!-- // 05 - Block -->
-<div class="site-section">
+<div class="site-section" id="t">
   <div class="container">
     <div class="row mb-5">
       <div class="col-lg-4">
@@ -483,7 +502,7 @@
   </div>
 </div>
 
-<div class="news-updates">
+<div class="news-updates" id="n">
   <div class="container">
      
     <div class="row">

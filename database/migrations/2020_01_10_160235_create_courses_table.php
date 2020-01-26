@@ -17,6 +17,7 @@ class CreateCoursesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('cluster');
+            $table->string('program');
             $table->string('subjects');
             $table->json('universities');
             $table->integer('likes')->default(0);
