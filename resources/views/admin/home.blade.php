@@ -98,6 +98,29 @@
               <a href="{{route('cole')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
           </div>
+
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <div class="row">
+                <div class="col-md-6">
+                  <h3>{{round($BAL,2)}}</h3>
+                  <p>SMS Balance</p>
+                </div>
+                <div class="col-md-6">
+                <h3>{{$cost}}</h3>
+                  <p>SMS Usage</p>
+                </div>
+                </div>
+              </div>
+              <div class="icon">
+               <i class="fas fa-chart-bar    "></i>
+              </div>
+              <a href="" class="small-box-footer">Balance KES {{$BAL}}</a>
+            </div>
+          </div>
+
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small box -->

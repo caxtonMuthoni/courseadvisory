@@ -43,16 +43,21 @@
       @include('generals.nav')
 
         <main class="py-4">
-        @if(session()->has('success'))
-    <div class="alert alert-success">
+
+<!-- error -->
+<div class="row justify-content-center mt-5">
+ @if(session()->has('success'))
+    <div class="alert alert-success col-md-8">
         {{ session()->get('success') }}
     </div>
 @endif
 @if(session()->has('error'))
-    <div class="alert alert-danger">
+    <div class="alert alert-danger col-md-8">
         {{ session()->get('error') }}
     </div>
 @endif
+ </div>
+<!-- enderror -->
             @yield('content')
         </main>
         @include('generals.footer')

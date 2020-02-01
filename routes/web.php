@@ -77,3 +77,15 @@ Route::post('/addcoursetobasket/{id}','ProgramController@store')->name('addcours
 Route::get('/basket','ProgramController@index')->name('basket')->middleware('auth');
 Route::get('/basket2','ProgramController@index2')->name('basket2')->middleware('auth');
 Route::get('/basketdelete/{id}','ProgramController@destroy')->name('deletebasket')->middleware('auth');
+
+Route::get('/createSms','SMSController@createSms')->name('createSms')->middleware('auth');
+
+
+Route::post('/checkPhone','OTPController@checkPhone')->name('checkPhone');
+Route::post('/updatePassword','OTPController@updatePassword')->name('updatePassword');
+Route::get('/reset','OTPController@reset')->name('reset');
+
+
+
+
+

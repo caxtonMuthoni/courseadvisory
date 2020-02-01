@@ -158,7 +158,7 @@
                                     <b>D</b><input id="physics" type="radio" class="mx-2" name ="physics" value="3">
                                     <b>D-</b><input id="physics" type="radio" class="mx-2" name ="physics" value="2">
                                     <b>E</b><input id="physics" type="radio" class="mx-2" name ="physics" value="1">
-                                    <b>N/B</b><input id="physics" type="radio" class="mx-2" name ="physics" value="0">
+                                    <b>N/A</b><input id="physics" type="radio" class="mx-2" name ="physics" value="0">
             
                                 </div>
                                 @error('physics')
@@ -241,7 +241,7 @@
                                     <b>D</b><input id="history" type="radio" class="mx-2" name ="history" value="3">
                                     <b>D-</b><input id="history" type="radio" class="mx-2" name ="history" value="2">
                                     <b>E</b><input id="history" type="radio" class="mx-2" name ="history" value="1">
-                                    <b>N/B</b><input id="history" type="radio" class="mx-2" name ="history" value="0">
+                                    <b>N/A</b><input id="history" type="radio" class="mx-2" name ="history" value="0">
             
                                 </div>
                                 @error('history')
@@ -324,7 +324,7 @@
                                     <b>D</b><input id="business" type="radio" class="mx-2" name ="business" value="3">
                                     <b>D-</b><input id="business" type="radio" class="mx-2" name ="business" value="2">
                                     <b>E</b><input id="business" type="radio" class="mx-2" name ="business" value="1">
-                                    <b>N/B</b><input id="business" type="radio" class="mx-2" name ="business" value="0">
+                                    <b>N/A</b><input id="business" type="radio" class="mx-2" name ="business" value="0">
             
                                 </div>
                                 @error('business')

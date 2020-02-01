@@ -8,6 +8,7 @@ use App\Course;
 use Illuminate\Http\Request;
 use Auth;
 
+
 class ProgramController extends Controller
 {
     /**
@@ -31,11 +32,7 @@ class ProgramController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
-
+   
     /**
      * Store a newly created resource in storage.
      *
@@ -52,7 +49,7 @@ class ProgramController extends Controller
         ]);
 
         $coursebasketsize = Program::where('userid',Auth::user()->id)->count();
-        if($coursebasketsize > 5){
+        if($coursebasketsize > 4){
             return redirect()->route('basket')->with("error","Sorry, You have reached the maximum progrmas required !!!");
         }
         $uni = $request->institution;

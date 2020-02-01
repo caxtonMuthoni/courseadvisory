@@ -109,7 +109,13 @@ class ProfileController extends Controller
 
     public static function AGP(){
         $profile = profile::where('userid',Auth::user()->id)->first();
-
+        if($profile === null){
+            $profile = new profile;
+            $profile->userid = Auth::user()->id;
+            if($profile->save()){
+                $profile = profile::where('userid',Auth::user()->id)->first();
+            }
+        }
        //Group II
 
        if( ($profile->biology > $profile->physics) && ($profile->biology > $profile->chemistry)){
@@ -220,6 +226,13 @@ else {
 
     public function profile(){
         $profile = profile::where('userid',Auth::user()->id)->first();
+        if($profile === null){
+            $profile = new profile;
+            $profile->userid = Auth::user()->id;
+            if($profile->save()){
+                $profile = profile::where('userid',Auth::user()->id)->first();
+            }
+        }
         $AGP = $this->AGP();
         $meanGrade = $this->meanGrade($AGP);
         $cluster = $this->getCluster();
@@ -287,6 +300,13 @@ else {
 
        
         $profile = profile::where('userid',Auth::user()->id)->first();
+        if($profile === null){
+            $profile = new profile;
+            $profile->userid = Auth::user()->id;
+            if($profile->save()){
+                $profile = profile::where('userid',Auth::user()->id)->first();
+            }
+        }
         $fileName= $profile->avatar;
         if($request->hasFile('avatar')) {
             if ($profile->avatar && $profile->avatar != "default.png"){
@@ -325,6 +345,13 @@ else {
 
     public static function getCluster(){
        $profile = profile::where('userid',Auth::user()->id)->first();
+       if($profile === null){
+        $profile = new profile;
+        $profile->userid = Auth::user()->id;
+        if($profile->save()){
+            $profile = profile::where('userid',Auth::user()->id)->first();
+        }
+    }
        $english = $profile->english;
        $kiswahili = $profile->kiswahili;
        $mathematics = $profile->mathematics;
@@ -354,7 +381,7 @@ else {
            $science = $biology;
        }
        elseif($physics== $chemistry && $physics > $biology){
-           $science == $physics;
+           $science = $physics;
        }
        else{
            $science = $chemistry;

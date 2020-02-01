@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use AfricasTalking\SDK\AfricasTalking;
 use App\User;
+use App\SMS;
 use Auth;
 
 class HomeController extends Controller
@@ -32,7 +34,24 @@ class HomeController extends Controller
         if(Auth::user()->role != 1){
             return redirect()->route('home');
          }
-        return view('admin.home');
+            $username = 'cagimu'; 
+            $apiKey   = '4364fea1f320e7d417614fc23bd4f8bc312268e29b1cf000c45c0cc0772036eb'; 
+            $AT       = new AfricasTalking($username, $apiKey);
+//Checking Account Balance
+            $data = $AT->application()->fetchApplicationData();
+            $newData = $data['data'];
+            $UserData = get_object_vars($newData);
+            $newUserData = $UserData['UserData'];
+            $balanced = get_object_vars($newUserData);
+            $newBalance = $balanced['balance'];
+            $BAL = substr($newBalance,4);
+
+         $smses = SMS::all();
+         $cost = 0;
+         foreach($smses as $sms){
+           $cost = $cost + $sms->amount;
+         }
+        return view('admin.home',compact('cost','BAL'));
     }
 
     public function allusers(){
